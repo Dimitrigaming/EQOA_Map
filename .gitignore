@@ -1,0 +1,15 @@
+# Built by build_exe.bat (PyInstaller): the exe goes to GitHub Releases, not the code
+build/
+dist/
+*.spec
+__pycache__/
+*.pyc
+
+# Map tiles from eqoa.live: not ours to share; each person downloads them from inside the app
+maps/
+
+# Each person's own files, made by the app next to it
+settings.json
+pins.json
+quest_progress.json
+*.tmp
