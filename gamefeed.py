@@ -521,8 +521,8 @@ class Namer:
 
 
 # ----------------------------------------------------------------- Windows' own capture
-NEEDS_ADMIN = ("Npcap isn't installed, so the map uses Windows' own packet capture instead, which only works "
-               "while the map runs as administrator.")
+NEEDS_ADMIN = ("To follow your character, the map reads the game's network traffic with Windows' own "
+               "packet capture. Windows only allows that while the map runs as administrator.")
 
 
 def is_admin() -> bool:
@@ -690,9 +690,9 @@ class GameFeed:
                 from scapy.arch.windows import get_windows_if_list  # noqa: F401
                 from scapy.config import conf
                 if not getattr(conf, "use_pcap", False):
-                    return "Npcap isn't installed. Get it free from npcap.com (default options), then restart the map."
+                    return "The packet capture couldn't start. Restart the map."
             except Exception:
-                return "Npcap isn't installed. Get it free from npcap.com (default options), then restart the map."
+                return "The packet capture couldn't start. Restart the map."
         return None
 
     def _local_ips(self):
@@ -904,8 +904,8 @@ class GameFeed:
             try:
                 self.sniffer, self.listening_on = self._open_windows()
             except Exception as e:
-                return (f"Couldn't start Windows' packet capture: {e}. Installing Npcap (npcap.com, default "
-                        "options) is the other way.")
+                return (f"Couldn't start Windows' packet capture: {e}. Make sure the map is running as "
+                        "administrator, then turn tracking on again.")
             self.filter_ports = ports
             self.games = games
             self.started = time.monotonic()
@@ -926,7 +926,7 @@ class GameFeed:
             except Exception as e:
                 last = e
         if last is not None or self.sniffer is None:
-            hint = " Is Npcap installed (npcap.com)?" if sys.platform == "win32" else ""
+            hint = ""
             return f"Couldn't start listening to network traffic: {last}.{hint}"
         self.games = games
         self.started = time.monotonic()
@@ -994,12 +994,12 @@ class GameFeed:
         if not self.games and not st["game_packets"]:
             lines.append("→ The map can't see the game running. Start it with ▶ Launch game, or set its location "
                          "in Settings so the map knows which program it is.")
+        elif not st["udp"] and self.backend == "windows":
+            lines.append("→ No network traffic is reaching the map. Windows Firewall may be blocking it: allow the "
+                         "map through (Windows Security ▸ Firewall ▸ Allow an app), then restart the map.")
         elif not st["udp"]:
-            lines.append("→ No network traffic at all is reaching the map. Npcap may not be capturing on the adapter "
-                         "your internet uses (try reinstalling Npcap with default options, then restart the map).")
-        if not st["udp"] and self.backend == "windows":
-            lines[-1] = ("→ No network traffic is reaching the map. Windows Firewall may be blocking it: allow the "
-                         "map through (Windows Security ▸ Firewall ▸ Allow an app), or install Npcap (npcap.com).")
+            lines.append("→ No network traffic at all is reaching the map. The capture may not be on the adapter "
+                         "your internet uses; restart the map, and send this report if it keeps happening.")
         elif not st["udp_sent"]:
             lines.append("→ Traffic is seen, but none of it as sent by this PC. Something unusual about your network "
                          "addresses; please send this report.")

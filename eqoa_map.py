@@ -650,15 +650,15 @@ class MainWindow(QMainWindow):
         self.menuBar().addAction(settings_act)   # a button on the menu bar, next to Map
         fm = self.menuBar().addMenu("&Feed")
         self.track_act = QAction("Track the game automatically", self, checkable=True)
-        self.track_act.setToolTip("Reads your position from the game's own network traffic on this PC (Npcap, or run as administrator)")
+        self.track_act.setToolTip("Reads your position from the game's own network traffic on this PC (needs the map to run as administrator)")
         self.track_act.toggled.connect(self.set_track_game)
         fm.addAction(self.track_act)
         a = QAction("Tracking details…", self)
         a.triggered.connect(self.show_tracking_details)
         fm.addAction(a)
-        self.admin_act = QAction("Start as administrator when Npcap isn't installed", self, checkable=True)
-        self.admin_act.setToolTip("Without Npcap the map reads the game's traffic with Windows' own capture, "
-                                  "which needs administrator")
+        self.admin_act = QAction("Start the map as administrator", self, checkable=True)
+        self.admin_act.setToolTip("Following your character reads the game's traffic with Windows' own "
+                                  "packet capture, which needs administrator")
         self.admin_act.setChecked(self.settings.get("run_as_admin", False))
         self.admin_act.toggled.connect(lambda on: (self.settings.__setitem__("run_as_admin", on), self.save_settings()))
         fm.addAction(self.admin_act)
@@ -1032,9 +1032,9 @@ class MainWindow(QMainWindow):
         box.setWindowTitle("Track the game")
         box.setIcon(QMessageBox.Information)
         box.setText(gamefeed.NEEDS_ADMIN)
-        box.setInformativeText("Restart the map as administrator now? Windows asks each time it starts that way.\n\n"
-                               "Or install Npcap (free from npcap.com, default options) and the map won't need it.")
-        always = QCheckBox("Always start the map as administrator (when Npcap isn't installed)")
+        box.setInformativeText("Restart the map as administrator now? Windows will ask "
+                               "\"allow this app to make changes?\" each time the map starts.")
+        always = QCheckBox("Always start the map as administrator")
         always.setChecked(True)
         box.setCheckBox(always)
         go = box.addButton("Restart as administrator", QMessageBox.AcceptRole)
@@ -1436,7 +1436,7 @@ class MainWindow(QMainWindow):
         auto = QCheckBox("Launch the game when the map opens")
         auto.setChecked(self.settings.get("launch_on_start", False))
         form.addRow("", auto)
-        track = QCheckBox("Track the game automatically (Npcap, or run as administrator)")
+        track = QCheckBox("Track the game automatically")
         track.setChecked(self.track_act.isChecked())
         form.addRow("", track)
         v.addLayout(form)

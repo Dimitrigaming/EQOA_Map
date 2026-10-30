@@ -2,13 +2,11 @@ NORRATH FIELD MAP  (desktop version)
 ====================================
 
 First run
-  1. Install Python from python.org (tick "Add python.exe to PATH").
-  2. Double-click run.bat. The first time it installs PySide6 (a minute or two).
-  3. In the app: Map > Download Tunaria map. It resumes if you stop it.
-
-Make an .exe
-  Double-click build_exe.bat. The app appears in dist\NorrathFieldMap.exe.
-  Keep "maps", pins.json and settings.json in the same folder as the exe.
+  1. Unzip NorrathFieldMap.zip anywhere. Keep the .json files next to NorrathFieldMap.exe.
+  2. Run NorrathFieldMap.exe. No Python or anything else to install.
+     Windows may say "Windows protected your PC" the first time: More info > Run anyway.
+  3. The maps are included (the "maps" folder: keep it next to the exe too).
+  4. Settings (next to Map): point Game client at your eqoa.exe, then use ▶ Launch game.
 
 Using it
   Mouse wheel zooms, drag pans, Home fits the whole map.
@@ -22,17 +20,11 @@ Tracking your character (no setup in the game)
   read-only, like Wireshark. It never touches the game, its memory or files,
   and never sends anything. Use the normal, unmodified client.
 
-  Setup, either way works:
-    A. Nothing to install: when the map starts without Npcap it offers to restart
-       as administrator and uses Windows' own packet capture. Windows asks "allow
-       this app to make changes?" each time it starts. If Windows Firewall asks,
-       allow it (otherwise no traffic reaches the map).
-       Feed > "Start as administrator when Npcap isn't installed" turns this on/off.
-    B. Or install Npcap from npcap.com (the capture driver Wireshark uses, default
-       options). Then the map needs no administrator. If Npcap is installed, the
-       map always uses it.
-  (Npcap's license doesn't let other apps bundle its installer, so the map can't
-  include it; option A is the built-in alternative.)
+  Setup: nothing to download. The first time, the map asks to restart as
+  administrator: Windows only lets a program read network traffic that way.
+  Windows then asks "allow this app to make changes?" each time the map starts.
+  If Windows Firewall asks, allow it (otherwise no traffic reaches the map).
+  Feed > "Start the map as administrator" turns this on/off.
   Feed > Track the game automatically is on by default.
 
   Easiest: Settings (next to Map) > Game client: point it at your eqoa.exe, then use
@@ -109,7 +101,7 @@ Feed format (for other tools), one JSON message per update, via Feed > Feed addr
   {"char": "Dimitri", "world": "Tunaria", "x": 25123.4, "z": 14002.7, "heading": 1.57}
 
 Files
-  maps\      downloaded map tiles (Tunaria is a few hundred MB at full detail)
+  maps\      the map tiles (Tunaria is a few hundred MB at full detail)
   pins.json  your pins. Copy this file to share pins, or use Export/Import.
   quests.json            the quest data (keep it next to the app or the exe)
   atlas.json             every named place for the Find box (zones, towns, NPCs, camps)
@@ -117,5 +109,10 @@ Files
   quest_progress.json    your quest progress per character
   places.json            coachmen, routes, towns, XP camps and rares (keep it next to the app)
 
-Map art: eqoa.live/map by Xylof / Sandstorm. Please don't redistribute the tiles
-without their OK. Share the app and pins.json instead; others can download the map themselves.
+Map art: eqoa.live/map by Xylof / Sandstorm (the tiles in the maps folder).
+Share your pins by sending pins.json (or Export pins).
+
+Running from the source code (for making changes)
+  1. Install Python from python.org (tick "Add python.exe to PATH").
+  2. Double-click run.bat. The first time it installs what it needs (a minute or two).
+  build_exe.bat makes dist\NorrathFieldMap.exe; make_release.bat also zips it for GitHub.

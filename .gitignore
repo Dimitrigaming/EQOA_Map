@@ -1,6 +1,7 @@
 # Built by build_exe.bat (PyInstaller): the exe goes to GitHub Releases, not the code
 build/
 dist/
+release/
 *.spec
 __pycache__/
 *.pyc
